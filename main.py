@@ -46,8 +46,24 @@ def get_code(node, prefix="", code={}):
 
 # given an alphabet and frequencies, compute the cost of a fixed length encoding
 def fixed_length_cost(f):
-    # TODO
-    pass
+    # 1. Find the number of unique characters in the alphabet (k).
+    num_unique_chars = len(f)
+
+    # Handle edge case of an empty file
+    if num_unique_chars == 0:
+        return 0
+
+    # 2. Calculate the number of bits required for a fixed-length code.
+    # This is the ceiling of log base 2 of the number of unique characters.
+    # For example, 5 unique characters would require ceil(log2(5)) = 3 bits.
+    bits_per_char = math.ceil(math.log2(num_unique_chars))
+ 
+    # 3. Find the total number of characters in the document.
+    # This is the sum of all frequencies.
+    total_chars = sum(f.values())
+
+    # 4. The total cost is the (number of bits per char) * (total chars).
+    return bits_per_char * total_chars
 
 # given a Huffman encoding and character frequencies, compute cost of a Huffman encoding
 def huffman_cost(C, f):
