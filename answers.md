@@ -1,7 +1,7 @@
 # CMPS 6610 Problem Set 04
 ## Answers
 
-**Name:**_________________________
+**Name:**_ Aaron Dumont_______________________
 
 
 Place all written answers from `problemset-04.md` here for easier grading.
