@@ -35,6 +35,7 @@ def make_huffman_tree(f):
     # insert z into the priority queue (using an empty character "")
     while (p.qsize() > 1):
         # TODO
+        pass
         
     # return root of the tree
     return p.get()
@@ -70,8 +71,19 @@ def huffman_cost(C, f):
     # TODO
     pass
 
-f = get_frequencies('f1.txt')
-print("Fixed-length cost:  %d" % fixed_length_cost(f))
+# List of all 5 text files from the repository
+files = ['F1.txt', 'alice29.txt', 'asyoulik.txt', 'fields.c', 'grammar.lsp']
+
+print("--- Part 1a: Fixed-Length Costs ---")
+for fname in files:
+    # 1. Get frequencies for the current file
+    f = get_frequencies(fname)
+    
+    # 2. Compute the fixed-length cost
+    cost = fixed_length_cost(f)
+    
+    # 3. Print the result
+    print(f"File: {fname}, Fixed-length cost: {cost}")
 T = make_huffman_tree(f)
 C = get_code(T)
 print("Huffman cost:  %d" % huffman_cost(C, f))
