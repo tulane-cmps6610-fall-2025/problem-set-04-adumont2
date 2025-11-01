@@ -34,16 +34,43 @@ def make_huffman_tree(f):
     # create a new node z with x and y as children,
     # insert z into the priority queue (using an empty character "")
     while (p.qsize() > 1):
-        # TODO
-        pass
+        # 1. Get the two nodes with the lowest frequencies
+        x = p.get()
+        y = p.get()
+
+        # 2. Create a new internal node
+        # Its frequency is the sum of its children's frequencies.
+        # Its character is empty ("") as per the prompt.
+        z = TreeNode(x, y, (x.data[0] + y.data[0], ""))
+        
+        # 3. Add the new internal node back into the priority queue
+        p.put(z)
         
     # return root of the tree
     return p.get()
 
 # perform a traversal on the prefix code tree to collect all encodings
-def get_code(node, prefix="", code={}):
-    # TODO - perform a tree traversal and collect encodings for leaves in code
-    pass
+def get_code(node, prefix="", code=None):
+    # This function is recursive. 
+    # We use code=None to properly initialize the dictionary on the first call.
+    if code is None:
+        code = {}
+    
+    # Base case: We are at a leaf node (a character) 
+    if node.left is None and node.right is None:
+        # Store the collected prefix as the code for this character 
+        code[node.data[1]] = prefix
+    
+    # Recursive step: Internal node
+    else:
+        # Traverse left, appending '0' 
+        if node.left:
+            get_code(node.left, prefix + "0", code)
+        # Traverse right, appending '1' 
+        if node.right:
+            get_code(node.right, prefix + "1", code)
+            
+    return code
 
 # given an alphabet and frequencies, compute the cost of a fixed length encoding
 def fixed_length_cost(f):
@@ -58,7 +85,7 @@ def fixed_length_cost(f):
     # This is the ceiling of log base 2 of the number of unique characters.
     # For example, 5 unique characters would require ceil(log2(5)) = 3 bits.
     bits_per_char = math.ceil(math.log2(num_unique_chars))
- 
+
     # 3. Find the total number of characters in the document.
     # This is the sum of all frequencies.
     total_chars = sum(f.values())
@@ -68,24 +95,43 @@ def fixed_length_cost(f):
 
 # given a Huffman encoding and character frequencies, compute cost of a Huffman encoding
 def huffman_cost(C, f):
-    # TODO
-    pass
+    # This function computes the total cost of a Huffman encoding 
+    total_cost = 0
+    # Iterate over every character and its frequency
+    for char, freq in f.items():
+        if char in C:
+            # The cost for one character is its frequency * length of its code
+            total_cost += freq * len(C[char])
+            
+    return total_cost
+
+# --- Main execution ---
+# This part will run all calculations for all 5 files
+# and print the results, which you can use for your table in 1d.
 
 # List of all 5 text files from the repository
 files = ['F1.txt', 'alice29.txt', 'asyoulik.txt', 'fields.c', 'grammar.lsp']
 
-print("--- Part 1a: Fixed-Length Costs ---")
+print("--- Huffman Coding Costs (for 1d) ---")
+print(f"{'File':<15} | {'Fixed Cost':<12} | {'Huffman Cost':<14} | {'Ratio (Huffman/Fixed)':<20}")
+print("-" * 67)
+
 for fname in files:
-    # 1. Get frequencies for the current file
+    # 1. Get frequencies
     f = get_frequencies(fname)
     
-    # 2. Compute the fixed-length cost
-    cost = fixed_length_cost(f)
+    # 2. Compute fixed cost
+    f_cost = fixed_length_cost(f)
     
-    # 3. Print the result
-    print(f"File: {fname}, Fixed-length cost: {cost}")
-#T = make_huffman_tree(f)
-#C = get_code(T)
-#print("Huffman cost:  %d" % huffman_cost(C, f))
+    # 3. Compute Huffman cost
+    T = make_huffman_tree(f)
+    C = get_code(T) # This will create a new code dict for each file
+    h_cost = huffman_cost(C, f)
+    
+    # 4. Compute ratio
+    ratio = h_cost / f_cost
+    
+    # 5. Print the results in a formatted table
+    print(f"{fname:<15} | {f_cost:<12} | {h_cost:<14} | {ratio:<20.4f}")
 
 
