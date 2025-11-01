@@ -36,7 +36,14 @@ Given an array A of size $n$ elements, we will treat this as an almost-complete 
 
      Work analysis:
 
-     The work of sift-down is proportional to the height of the node, not the height of the whole tree and the vast majority of nodes are near the bottom of the tree. Only one node (the root) is at height $logn$ and this is the only node that the full $O(logn)$ work is done on.
+     The work of sift-down is proportional to the height of the node, not the height of the whole tree and the vast majority of nodes are near the bottom of the tree. Only one node (the root) is at height $logn$ and this is the only node that the full $O(logn)$ work is done on. The total work $W(n)$ is the sum of work done at each height $k$:
+
+     The total work for a single sift-down call starting at a node with subtree height $k$ is:
+     ** Total Work = (work per step) $\times$ (Max number of steps) = $O(1)$ $\times$ $k$ and is therefore $O(k)$.
+
+    $$W(n) = \sum_{k=0}^{\log n} (\text{number of nodes at height } k) \times O(k)$$
+    $$W(n) \approx \sum_{k=0}^{\log n} \left(\frac{n}{2^{k+1}}\right) \cdot O(k)$$
+    This sum $O\left(n \sum_{k=0}^{\log n} \frac{k}{2^k}\right)$ converges to a constant multiple of $n$. Therefore, the total work is $O(n)$.
 
 
 
