@@ -34,6 +34,10 @@ Given an array A of size $n$ elements, we will treat this as an almost-complete 
 
      Hence, the last non-leaf node in the treee should be at index $i = [n/2] -1$. All nodes after this are valid mini-heaps.We can then iterate backward looping from $i = [n/2] -1$ down to the root (index $0$). We can implement the operation **sift-down** or **heapify** operation. This operation assumes the subtrees rooted at the left and right children of $i$ are already valid mini-heaps. t compares the node $i$ with its children. If $A[i]$ is larger than its smallest child, it is swapped with the smallest child. This process is recursively executed (the node "sifts down") until the node $i$ is smaller than both of its children or it becomes a leaf.
 
+     Work analysis:
+
+     The work of sift-down is proportional to the height of the node, not the height of the whole tree and the vast majority of nodes are near the bottom of the tree. Only one node (the root) is at height $logn$ and this is the only node that the full $O(logn)$ work is done on.
+
 
 
 - **2b.**
