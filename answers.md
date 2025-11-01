@@ -28,7 +28,7 @@ If Huffman coding is used on a document with alphabet $\sum$ in which every char
 
 
 - **2a.**
-Given an array A of size $n$ elements, we will treat this as an almost-complete binary tree and enforce the heap property from the bottom up. In a binary heap stored as an array, a parent (index $i$) has children at $2i$ and $2i + 1$ and the heap property requires every parent $\le$ its children. We can start at the end by identifying the last non-leaf-node in the tree.
+Given an array A of size $n$ elements, we will treat this as an almost-complete binary tree and enforce the heap property from the bottom up. In a binary heap stored as an array, a parent (index $i$) has children at $2i+1$ and $2i + 2$ and the heap property requires every parent $\le$ its children. We can start at the end by identifying the last non-leaf-node in the tree.
 
     Our array size is n elements with indices 0 to n-1. The last parent (non-leaf node) will be the **largest index** $i$ whose left child ($2*i +1$) is still inside the array. Hence, $2*i +1$ $\le$ $n-1$. Solve for $i$. $i$ $\le$ $(n-2)/2$ or $i = [n/2] - 1$
 
@@ -49,8 +49,28 @@ Given an array A of size $n$ elements, we will treat this as an almost-complete 
 
 - **2b.**
 
+    This algorithm is a single $for$ loop that runs $n/2$ times eg.
 
+    for $i$ from ($n/2 - 1$) down to $0$
+        
+    sift-down($A,i$)
 
+    In a purely sequential algorithm, the span, $S(n) = O(n)$, the same as work.The span of a sequential $for$ loop is the sum of the spans of each iteration. The span of one sift-down($i$) is $O(k_i)$, where $k_i$ is the height of the subtree at $i$. The total span is $\sum$ $O(k_i)$. This sum is the exact same $O(n)$ for the work analysis.
+
+    However, if we perform the sift-down operation in parallel for each node at the same level this alters the span calculation. The algorithm would then proceed in sequential phases, starting from the bottom of the tree (the leaves) and moving up to the root. 
+    
+    The height of the tree, $k$, as mentioned is $\log n$. At each level, the nodes of the binary tree structure can be heapified in parallel ($O(1) + O(2) + \dots +O(\log n)$). Therefore,
+
+    Total Span Calculation:
+
+    Since these $\log n$ phases must run sequentially, the total span is the sum of their individual spans:
+
+$$\text{Total Span} = O(1) + O(2) + O(3) + \dots + O(\log n)$$
+
+$$\text{Total Span} = O\left(\sum_{k=1}^{\log n} k\right)$$
+- This is the sum of an arithmetic series, which is $\frac{k(k+1)}{2}$. Substituting $k = \log n$:
+
+$$\text{Total Span} = O\left(\frac{\log n (\log n + 1)}{2}\right) = O(\log^2 n)$$
 
 - **3a.**
 
