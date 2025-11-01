@@ -84,8 +84,8 @@ for fname in files:
     
     # 3. Print the result
     print(f"File: {fname}, Fixed-length cost: {cost}")
-T = make_huffman_tree(f)
-C = get_code(T)
-print("Huffman cost:  %d" % huffman_cost(C, f))
+#T = make_huffman_tree(f)
+#C = get_code(T)
+#print("Huffman cost:  %d" % huffman_cost(C, f))
 
 
