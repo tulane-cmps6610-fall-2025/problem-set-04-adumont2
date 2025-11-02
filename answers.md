@@ -101,9 +101,9 @@ $$
 - **3b.**
 To prove this algorithm is optimal, we must prove the greedy choice and optimal substructure properties.
 
->>**1. Greedy Choice Property**
+>>**1. Proof of Greedy Choice Property**
 
->>Let $2^k$ be the largest coin denomination relevant to this problem such that $2^k \le N$. There exists an optimal solution for $N$ that includes at least one coin of value $2^k$.
+>>Let $2^k$ be the largest coin denomination relevant to this problem such that $2^k \le N$. There exists an optimal solution for $N$ that includes at least one coin of value $2^k$. The general intuition here is that if we don't take the biggest possible coin, we will be forced to make up its value using a combination of smaller coins; for coins of power-of-2, any combination of smaller coins is awlays a worse deal (ie. requires more coins) than just taking the one big coin first. We will show this with a proof by contradiction.
 
 >>**Proof**
 
@@ -117,8 +117,11 @@ To prove this algorithm is optimal, we must prove the greedy choice and optimal 
 
 >>5. We can take a subset of coins from $S$ that sums to $2^k$ such as two $2^{k-1}$ coins and replace them with a single $2^k$ coin. This new solution we will call $S'$. $S'$ now sums to $N$ but has one fewer coin than $S$. This ***contradicts*** our assumption that $S$ was the optimal solution (with the smallest number of coins). Therefore, our assumption above must be false. Any optimal solution $S$ must contain the greedy choice (one $2^k$ coin) and we have proven the greedy choice property.
 
+>>**2. Proof of Optimal Substructure Property**
 
+>> An optimal solution for $N$ contains an optimal solution for the subproblem $N' = N - 2^k$, where $2^k$ is the greedy choice. The general intuition for this proof is that we cannot build an optimal solution for a big problem out of a sub-optimal solution for a small problem. We will do this using a "swap" proof/proof by contradiction.
 
+>>
 - **3c.**
 
 
