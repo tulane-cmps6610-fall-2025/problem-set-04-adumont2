@@ -131,13 +131,31 @@ To prove this algorithm is optimal, we must prove the greedy choice and optimal 
 
 >>***Since both the proof of greedy choice property and optimal substructure property hold, the greedy algorithm we developed is optimal.***
 - **3c.**
+The input, or the amount of money to exchange, is $N$. The available denominations of coins are [$D = {2^0, 2^1, \dots, 2^k}$], where $k$ is the largest integer such that $2^k \le N$. Taking $\log_2$ of both sides means $k = [\log_2{N}]$. The number of denominations we must consider, $m = k +1$, is therefore $O(\log(N))$.
+
+>>For any demonation $c = 2^j$, if we use it once, the remaining amount $A' = A -2^j$. Since we only consider $c$ if $A \lt 2^{j+1}$ (as $2^{j+1} would have been taken in the previous step), the new amount $A' = A -2^j \lt 2^{j+1} = 2^j$. The new amount is now strictly less than c, so the coin $2^j$ can never be used more than once. Therefore, this is equivalent to finding the binary representation of $N$.
+Some pseudocode could be:
+
+1. $k= floor(\log_2(N))$
+2. Amount = $N$
+3. Solution = []
+4. for j from k down to 0:
+5. $c = 2^j$
+6. if Amount $\ge c$
+7. Solution.add($c$)
+8. Amount = Amount -$c$
+9. return Solution
 
 >>**Work Analysis**
+>>Setup is performed in lines 1-3. Calculating the integer log of N takes $O(\log(N))$ time while lines 2 and 3 are run in constant time. Therefore $W_{setup} = O(\log(N))$
 
+>>In the loop in lines 4-8, the loop iterates from $j = k$ down to $j = 0$. The total number of iterations is $k + 1$. Since $k = [\log_2{N}]$, the number of iterations is $O(\log(N))$. The work in each iteration is constant time $O(1)$ such as dividing by 2, comparing Amount to $c$, appending to a list and subtraction.
+
+>>The total work is therefore the sum of the two above. $W_{total}$ = $O(\log(N))$ + $O(\log(N))$ = $O(\log(N))$. **The total work is $O(\log(N))$ as the algorithm is dominated by a single loop that runs $O(\log(N))$ times, with each iteration performing a constant $O(1)$ amount of work.
 
 
 >>**Span Analysis**
-
+>>As we have discussed previously, span is the longest chain of sequential dependencies. This is a sequential algorithm. If we look at the iterations, the calculation in iteration $j - 1$ requires the result from iteration $j$ and hence, iteration $j - 1$ cannot start until iteration $j$ is finished. There is no opportunity for parallelism as presented in the alogrithm so $S_{total}$ = $O(\log(N))$ + $O(\log(N))$ = $O(\log(N))$.
 
 - **4a.**
 
