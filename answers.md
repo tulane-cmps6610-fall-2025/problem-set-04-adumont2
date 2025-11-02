@@ -103,6 +103,19 @@ To prove this algorithm is optimal, we must prove the greedy choice and optimal 
 
 >>**1. Greedy Choice Property**
 
+>>Let $2^k$ be the largest coin denomination relevant to this problem such that $2^k \le N$. There exists an optimal solution for $N$ that includes at least one coin of value $2^k$.
+
+>>**Proof**
+
+>>1. Let $S$ be any optimal solution for $N$. We know that $N \lt 2^{k+1}$. If we go back to our example above, we wanted to exchange $N = 29$ and possible coins were $16, 8, 4, 2, 1$.  Coin $2^k = 16$ and coin $2^{k+1} = 32$ which exceeds $N$. Therefore $S$ can contain one coin of value $2^k$ at most (as two would be $2 \cdot 2^k = 2^{k+1}$, which is greater than $N$).
+
+>>2. We will assume that $S$ does not contain a $2^k$ coin. All coins in $S$ must therefore have a value of $2^{k-1}$ or less.
+
+>>3. As $S$ must sum to $N$ and $N \ge 2^k$, all of the coins in $S$ must sum to at least $2^k$.
+
+>>4. We know that $2^k = 2 \cdot 2^{k-1}$. hence, any set of coins with values $\le 2^{k-1}$ that sums to $2^k$ must contain at least two coins. For example two $2^{k-1}$ coins or four $2^{k-2}$ coins, etc.
+
+>>5. We can take a subset of coins from $S$ that sums to $2^k$ such as two $2^{k-1}$ coins and replace them with a single $2^k$ coin. This new solution we will call $S'$. $S'$ now sums to $N$ but has one fewer coin than $S$. This ***contradicts*** our assumption that $S$ was the optimal solution (with the smallest number of coins). Therefore, our assumption above must be false. Any optimal solution $S$ must contain the greedy choice (one $2^k$ coin) and we have proven the greedy choice property.
 
 
 
