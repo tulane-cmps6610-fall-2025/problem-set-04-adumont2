@@ -73,7 +73,29 @@ $$\text{Total Span} = O\left(\sum_{k=1}^{\log n} k\right)$$
 $$\text{Total Span} = O\left(\frac{\log n (\log n + 1)}{2}\right) = O(\log^2 n)$$
 
 - **3a.**
+Given that we wish to exchange $N$ dollars for local currency where local currency is only in coins with denominations of powers of $2$ [$D = {2^0, 2^1, \dots, 2^k}$], we can construct a greedy algorithm producing the fewest coins as follows:
+- Start with an empty set of coins $\emptyset$
+- Find the largest coin denomination $2^i$ in $D$ that is less than or equal to the remaining amount $N$ ($2^i \le N$).
+- Add this coin $2^i$ to your set.
+- Subtract the value from the remaining amount: $N = N - 2^i$.
+- Repeat the above steps until $N = 0$.
 
+    This algorithm is equivalent to finding the binary representation of $N$. Each '1' in the binary string $N = b_k \dots b_1 b_0$ corresponds to one coin value $2^i$ where $b_i = 1$. 
+
+    Suppose I have $29 dollars to exchange. 
+
+    Possible coins in powers of 2 for the exchange include $\{16, 8, 4, 2, 1\}$
+
+    Greedy Coins selected through our algorithm: $\{16, 8, 4, 1\}$
+$$
+\begin{array}{ccccc}
+\text{Binary '1's:} & 1 & 1 & 1 & 0 & 1 \\
+& \downarrow & \downarrow & \downarrow & \downarrow & \downarrow \\
+& 16 & +8 & +4 & +0 & +1 & = 29
+\end{array}
+$$
+
+- Hence, the set of coins we pick using the greedy algorithm is identical to the set of powers of 2 that have a $'1'$ in the binary representation.
 
 
 - **3b.**
