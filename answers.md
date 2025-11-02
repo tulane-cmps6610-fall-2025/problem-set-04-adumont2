@@ -99,6 +99,9 @@ $$
 
 
 - **3b.**
+To prove this algorithm is optimal, we must prove the greedy choice and optimal substructure properties.
+
+>>**1. Greedy Choice Property**
 
 
 
