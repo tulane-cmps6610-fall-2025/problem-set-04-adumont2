@@ -132,6 +132,11 @@ To prove this algorithm is optimal, we must prove the greedy choice and optimal 
 >>***Since both the proof of greedy choice property and optimal substructure property hold, the greedy algorithm we developed is optimal.***
 - **3c.**
 
+>>**Work Analysis**
+
+
+
+>>**Span Analysis**
 
 
 - **4a.**
