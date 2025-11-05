@@ -158,8 +158,25 @@ Some pseudocode could be:
 >>As we have discussed previously, span is the longest chain of sequential dependencies. This is a sequential algorithm. If we look at the iterations, the calculation in iteration $j - 1$ requires the result from iteration $j$ and hence, iteration $j - 1$ cannot start until iteration $j$ is finished. There is no opportunity for parallelism as presented in the alogrithm so $S_{total}$ = $O(\log(N))$ + $O(\log(N))$ = $O(\log(N))$.
 
 - **4a.**
+The greedy algorithm we devised for Geometrica does not work in Fortuito. We will present a counterexample below to corroborate this.
 
+We must find the minimum numer of coins to make change for amount $N$ using an arbitrary set of k denominations $D = {D_0, D_1, ..., D_{k-1}}$.
 
+**Counter Example**
+Suppose we have $N = 6$. The Denomations include: $D: {1, 3, 4}$
+
+The Greedy solution we developed for Problem 3 proceeds as follows:
+- Take coin 4, remainder = 2
+- Take coin 1, remainder = 1
+- Take coin 1, reaminder =0
+- This takes a total of **3 coins**
+
+The optimal solution proceeds as follows:
+- Take coin 3, remainder = 3
+- Take coin 3, remainder = 0
+- This takes a total of **2 coins**
+
+Therefore, this counterexample proves that the greedy algorithm does not always produce the fewest number of coins in its solution.
 
 - **4b.**
 
