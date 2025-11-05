@@ -176,10 +176,10 @@ The optimal solution proceeds as follows:
 - Take coin 3, remainder = 0
 - This takes a total of **2 coins**
 
-Therefore, this counterexample proves that the greedy algorithm does not always produce the fewest number of coins in its solution.
+Therefore, this counterexample proves that the greedy algorithm does not always produce the fewest number of coins in its solution. This problem lacks the greedy choice property.
 
 - **4b.**
-
+The optimal substructure property
 
 
 
