@@ -179,9 +179,17 @@ The optimal solution proceeds as follows:
 Therefore, this counterexample proves that the greedy algorithm does not always produce the fewest number of coins in its solution. This problem lacks the greedy choice property.
 
 - **4b.**
-The optimal substructure property
+The optimal substructure property states that an optimal solution can be constructed from optimal solutions of smaller subproblems.
 
+Stating this property in the context of this problem: Let $Optimal(N)$ be the minimum number of coins required to make change for an amount $N$. An optimal solution for $Optimal(N)$ must use some first coin, $D_i$. The remaining $Optimal(N) -1$ coins in that solution must themselves form an optimal solution for the subproblem of making change for the remaining amound, defined as $N-D_i$.
 
+**Proof**
+We will perform a proof by contradiction.
+- 1. We will assume we have an optimal solution for $N$, which we will denote as $S_N$. This solution contains $Optimal(N)$ coins. $S_N$ consists of a first coin, $D_i$ and a set of remaining coins, $S'$, that sum to $N - D_i$. It thus follows that the size of the solution is 1 + $|S'|$.
+- 2. We will now assume, in contradiction to the above, that $S'$ is ***not*** an optimal solution for the subproblem of $N - D_i$. Given this, there exists some of other set of coins, $S''$, that also sums to $N - D_i$ but has fewer coins - that is, $|S''| \lt |S'|$.
+- 3. If the assertions in 2. were true, we could create a *new* solution for $N$ by combining the first coin $D_i$ with the set $S''$. The total number of coins would be $1 + |S''|$. Given that $|S''| \lt |S'|$ as stated above, then adding 1 to each side of the inequality, $1 + |S''| \lt 1 + |S'|$. This means that our new solution, $S''$ has fewer coins than our original "optimal" solution $S_N$. This is a contradiction.
+
+Therefore, our assumption in 2. above must be false. The set of remaining coins $S'$ must be an optimal solution for the subproblem $N - D_i$ and this problem has an optimal substructure property.
 
 - **4c.**
 
