@@ -195,6 +195,9 @@ We will perform a proof by contradiction.
 Using the optimal substructure property, we have created a dynamic programming algorithm using top-down memoization to avoid recomputing solutions to subproblems. We can create an algorithm comprised of three components:
 1. memo function - this function adds a memory or checks the memory table before the recursive function runs to ensure that the same subproblem is only solved once. This function checks the memo table for a given input. If it finds a result it returns the result, and if it finds nothing it runs the computation function, stores the new result and then returns that result to avoid re-computing the same problem.
 2. recursive function - this core recursive function contains the logic for solving the change-making problem. It defines the problem's optimal substructure. It is called with a state ($i, n$) where $i$ is the number of coin types we are allowed to use and $n$, the amount of change we are trying to make. The function works by checking cases:
+- Base case 1: (case (_,0)) - the problem is solved. The cost to make 0 is 0 coins. It returns 0.
+- Base case 2: (case (0, _)) - We have 0 coint types left but n is still greater than 0 so it is impossible to make change. It will return infinity.
+- Recursive Case: (case _) - All other situations. We have $i$ coins and need to make amount $n$. The function shjould solve this by finding the *minimum* of 2 smaller, recursive subproblems. It gets the current coin's value, coin_w.
 3. wrapper function - to initialize the memo table and start the process. It gets the total number of denominations, $k$. It creates a new, empty memo table and then calls the recusrive function on the full-sized problem "solve for $k$ coins and amount $N$". It then returns the final answer.
 
 - **5a.**
