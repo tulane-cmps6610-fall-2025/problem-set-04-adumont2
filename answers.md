@@ -189,10 +189,13 @@ We will perform a proof by contradiction.
 - 2. We will now assume, in contradiction to the above, that $S'$ is ***not*** an optimal solution for the subproblem of $N - D_i$. Given this, there exists some of other set of coins, $S''$, that also sums to $N - D_i$ but has fewer coins - that is, $|S''| \lt |S'|$.
 - 3. If the assertions in 2. were true, we could create a *new* solution for $N$ by combining the first coin $D_i$ with the set $S''$. The total number of coins would be $1 + |S''|$. Given that $|S''| \lt |S'|$ as stated above, then adding 1 to each side of the inequality, $1 + |S''| \lt 1 + |S'|$. This means that our new solution, $S''$ has fewer coins than our original "optimal" solution $S_N$. This is a contradiction.
 
-Therefore, our assumption in 2. above must be false. The set of remaining coins $S'$ must be an optimal solution for the subproblem $N - D_i$ and this problem has an optimal substructure property.
+>>Therefore, our assumption in 2. above must be false. The set of remaining coins $S'$ must be an optimal solution for the subproblem $N - D_i$ and this problem has an optimal substructure property.
 
 - **4c.**
-
+Using the optimal substructure property, we have created a dynamic programming algorithm using top-down memoization to avoid recomputing solutions to subproblems. We can create an algorithm comprised of three components:
+1. memo function - this function adds a memory or checks the memory table before the recursive function runs to ensure that the same subproblem is only solved once. This function checks the memo table for a given input. If it finds a result it returns the result, and if it finds nothing it runs the computation function, stores the new result and then returns that result to avoid re-computing the same problem.
+2. recursive function - this core recursive function contains the logic for solving the change-making problem. It defines the problem's optimal substructure. It is called with a state ($i, n$) where $i$ is the number of coin types we are allowed to use and $n$, the amount of change we are trying to make. The function works by checking cases:
+3. wrapper function - to initialize the memo table and start the process. It gets the total number of denominations, $k$. It creates a new, empty memo table and then calls the recusrive function on the full-sized problem "solve for $k$ coins and amount $N$". It then returns the final answer.
 
 - **5a.**
 
