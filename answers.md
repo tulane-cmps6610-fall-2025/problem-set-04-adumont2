@@ -288,10 +288,36 @@ final_answer = solve_change(k, N)
 
 - **5b.**
 
-The greedy choice property does not hold for this subproblem. Greedy criteria will fail to produce an optimal solution.
+>>The greedy choice property does not hold for this subproblem. Greedy criteria will fail to produce an optimal solution. Two counter examples to lend credence to this assertion include:
 
+1. Greedy by Highest Value ($v_i$):
 
+>> A greedy algorithm might pick the task with the greatest value first.
 
+- Tasks:
+>>- $a_1$: (start=0, finish=10, value=100)
+>>- $a_2$: (start=1, finish=3, value=40)
+>>- $a_3$: (start=3, finish=5, value=40)
+>>- $a_4$: (start=5, finish=7, value=40)
+>>- Greedy Choice: The algorithm picks $a_1$ (value 100), as it's the highest. This task conflicts with $a_2$, $a_3$, and $a_4$.
+>>- Greedy Solution: $\{a_1\}$, Total Value = 100.
+>>- Optimal Solution: $\{a_2, a_3, a_4\}$, Total Value = 120.
 
+ - **Conclusion: Greedy by value fails**.
+
+2. Counterexample: Greedy by Earliest Finish Time ($f_i$)
+
+>>Although this strategy may work for the unweighted problem, it fails here.
+- Tasks:
+>>- $a_1$: (start=0, finish=5, value=10)
+>>- $a_2$: (start=4, finish=10, value=100)
+>>- Greedy Choice: The algorithm picks $a_1$ first (finish time 5). This task conflicts with $a_2$.
+>>- Greedy Solution: $\{a_1\}$, Total Value = 10.
+>>- Optimal Solution: $\{a_2\}$, Total Value = 100.
+
+- **Conclusion: Greedy by earliest finish time fails.**
+
+With these two counterexamples, we have shown that the greedy property choice does not hold for this problem.
 
 - **5c.**
+
