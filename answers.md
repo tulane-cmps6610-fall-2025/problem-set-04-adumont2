@@ -277,10 +277,19 @@ final_answer = solve_change(k, N)
 >>**Total work: $O(kN) \times O(1) = O(kN)$**.
 
 - **5a.**
+- Yes, the optimal substructure propertry appears to hold for weighted task selection. We will use a proof by contradiction.
+- 1. Assume the tasks $A = \{a_0, ... , a_{n-1}\}$ are sorted by their finish times. Let $opt$ by an optimal solution (a set of compatible tasks with maximum total value) for the full set of tasks. This task $a_i$ has a value, $v_i$. As $a_i$ is in the solution, no other task in $opt$ can conflict with it. Therefore, all other tasks in $opt$ must finish before $a_i$ starts.
+-2. We will now define a subproblem which is to find the optimall solution for all tasks in $A$ that are compatible with $a_i$. Let $opt'$ = $opt$ - \{$a_i$} be the rest of our optimal solution. The value of the solution if $value(O) = value(O') + v_i$. 
+-3. Now assume that $opt'$ is not an optimal solution for this subproblem. This means that there must be some other set of compatible tasks $S'$ whose total value is greater then $opt'$ (ie. $value(S') \gt value(O')$).
+>>>>- If this were true, we could create a new solution $S = S' \cup \{a_i\}$. This new solution $S$ would be valid (since all tasks in $S'$ are compatible with $a_i$).
+>>>>- Its total value would be $value(S) = value(S') + v_i$. Since we assumed $value(S') \gt value(O')$, it follows that $value(S) \gt value(O')$. This means that $value(S) \gt value(O)$ which contradicts our initial assumption that $opt$ was the optimal solution.
 
-
+- Therefore, our assumption must be false. $opt'$ must be an optimal solution for the subproblem of tasks compatible with $a_i$. This proves that an optimal solution to the problem contains optimal solutions to its subproblems.
 
 - **5b.**
+
+The greedy choice property does not hold for this subproblem. Greedy criteria will fail to produce an optimal solution.
+
 
 
 
