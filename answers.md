@@ -198,7 +198,83 @@ Using the optimal substructure property, we have created a dynamic programming a
 - Base case 1: (case (_,0)) - the problem is solved. The cost to make 0 is 0 coins. It returns 0.
 - Base case 2: (case (0, _)) - We have 0 coint types left but n is still greater than 0 so it is impossible to make change. It will return infinity.
 - Recursive Case: (case _) - All other situations. We have $i$ coins and need to make amount $n$. The function shjould solve this by finding the *minimum* of 2 smaller, recursive subproblems. It gets the current coin's value, coin_w.
+
+>>-    Choice 1 - Skip. This skips the ith coin and solves the problem for the same amount $n$, but only using the first $i-1$ coins.
+
+>>- Choice 2- Take. This asks what is the mininum number of coins if the ith coin is used. It first checks in $n \ge coin_w$. Is not, it can't take the coin and this choice is inifinity. If it can take the coin, it calculates $1 +$ (the solution to a new subproblem).
+>>>>- The 1 counts the coin we just took.
+>>>>- The new subproblem is ($i, n -coin_w$). We must solve for the *remaining amount* ($n - coin_w$). We must pass $i$ (not $i-1$) as this is an unbounded problem where we are allowed to re-use the $ith$ coin.
+
+>>- **Final Result**: The function returns the min of Choice 1 (Skip) or Choice 2 (Take).
+
 3. wrapper function - to initialize the memo table and start the process. It gets the total number of denominations, $k$. It creates a new, empty memo table and then calls the recusrive function on the full-sized problem "solve for $k$ coins and amount $N$". It then returns the final answer.
+
+- A simplified pseudocode is as follows:
+
+// D is the array of k coin denominations {D[0], D[1], ... D[k-1]}
+// k is the number of denominations
+// N is the target amount
+
+// 1. Create the memoization table, size (k+1) x (N+1)
+memo_table = new 2D array, initialized to -1
+
+// 2. Define the main recursive function
+function solve_change(i, n):
+    
+    // --- Base Cases ---
+    
+    // Base Case 1: Success!
+    if n == 0:
+        return 0
+        
+    // Base Case 2: Failure (went past 0 or ran out of coins)
+    if n < 0 or i == 0:
+        return infinity // "infinity" means "impossible"
+
+    // --- Memoization Check ---
+    
+    // If we've already solved this, return the stored answer
+    if memo_table[i][n] != -1:
+        return memo_table[i][n]
+
+    // --- Recursive Step ---
+    
+    // Get the current coin's value (using i-1 for 0-indexing)
+    coin_w = D[i-1]
+    
+    // Choice 1: "Skip" this coin
+    // Solve using i-1 coins for the same amount n
+    choice_skip = solve_change(i-1, n)
+    
+    // Choice 2: "Take" this coin
+    choice_take = infinity // Assume we can't take it
+    if n >= coin_w:
+        // We can take it. The cost is 1 + the solution for the remaining amount.
+        // We pass 'i' (not i-1) because we can re-use this coin.
+        choice_take = 1 + solve_change(i, n - coin_w)
+
+    // --- Store and Return ---
+    
+    // The best solution is the minimum of the two choices
+    result = min(choice_skip, choice_take)
+    
+    // Store this new result in our "memory"
+    memo_table[i][n] = result
+    
+    return result
+
+// 3. Start the algorithm by solving the original, full problem
+final_answer = solve_change(k, N)
+
+**Work and Span Analysis**
+- **Work**: The work will be calculated by the number of subproblems multiplied by the work per subproblem.
+>>- Number of subproblems: The state is ($i, n$), where $i$ ranges from $0 to N$. This gives $O(k) \times O(N) = O(kN)$ distinct subproblems (nodes in the DAG).
+>>- Work per subproblem: The work inside the recursive function (assuming memoized calls are $O(1)$) involves a few comparison, an array lookup, an addition and a min operation which can all be done in constant time ($O(1)$).
+
+- **Span**: The span is the longest path in the recursion DAG.
+>>- A subproblem ($i, n$) depends on ($i-1, n$)(the "Skip" call) and ($i, n- coin_w$)(the "Take" call). The longest path must trace from the start ($k, N$) to a base case like ($0, 0$). This requires $k$ "Skip" steps to get $i$ to 0 and (in the worst case of a $1 coin) $N$ take steps to get $n$ to $0$. These dependencies form a chain and therefore the longest path is O($k + N$).
+
+>>**Total work: $O(kN) \times O(1) = O(kN)$**.
 
 - **5a.**
 
