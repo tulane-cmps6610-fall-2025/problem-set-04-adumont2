@@ -320,4 +320,80 @@ final_answer = solve_change(k, N)
 With these two counterexamples, we have shown that the greedy property choice does not hold for this problem.
 
 - **5c.**
+In this problem, we have proven that we have an optimal subtructure property but not the greedy choice property so dynamic programming should be a great fit to solve this. We can use a top-down memoization approach.
+
+- We will sort the tasks by finish time. Then for each task $i$ we can decide wheter to "take" it or "skip" it.
+
+- We will use a wrapper function to setup and a recursive function to compute the maxmium value obtainable from tasks $a_0$ through $a_i$.
+
+1. Wrapper function - this performs the setup by sorting and pre-computing values. 
+
+    function find_max_value(Tasks):
+    
+    // 1. Sort tasks by finish time (f_i)
+    A = sort_tasks_by_finish_time(Tasks)
+    n = length(A)
+    
+    // 2. Pre-compute the last compatible task array `p`
+    // p[i] = largest index j < i such that A[j].finish_time <= A[i].start_time
+    // (This can be found in O(n log n) time using binary search)
+    p = pre_compute_compatible_tasks(A)
+        
+    // 3. Create the 1D memo table
+    memo_table = new 1D array of size n, initialized to -1
+    
+    // 4. Call the recursive function to solve for all tasks
+    // (We pass n-1, the index of the last task)
+    return solve_tasks_recursive(n-1, A, p, memo_table)
+
+2. Recursive Function: This the recursive, memoized function that computes the maximum value obtainable from tasks $a_0$ through $a_i$.
+
+    function solve_tasks_recursive(i, A, p, memo_table):
+    
+    // --- Base Case ---
+    // If we have no tasks (index < 0), the total value is 0.
+    if i < 0:
+        return 0
+
+    // --- Memoization Check ---
+    if memo_table[i] != -1:
+        return memo_table[i]
+
+    // --- Recursive Step (modeled on Knapsack's recurrence) ---
+    
+    // Choice 1: "Skip" task i
+    // The value is the best we could do with the first i-1 tasks.
+    choice_skip = solve_tasks_recursive(i-1, A, p, memo_table)
+
+    // Choice 2: "Take" task i
+    // The value is v[i] + the optimal solution for all tasks
+    // compatible with i (which is found at index p[i]).
+    choice_take = A[i].value + solve_tasks_recursive(p[i], A, p, memo_table)
+
+    // --- Store and Return ---
+    
+    // The optimal solution is the MAX of these two choices.
+    result = max(choice_skip, choice_take)
+    memo_table[i] = result
+    
+    return result
+
+**Work and Span Analysis**:
+
+**Work:** The work of an alogrithm is its total number of operations from start to finish and for this particular alogrithm outlined above it consider the Setup and Dynamic Programming (sovling the problem).
+
+1. Setup work: This is the preprocessing we must perform before the recursive dynamic programming solution can be formulated. It is comprised of 2 parts:
+>>a. Sorting: We will sort by finish times and will use heap sort which we have proven before takes $O(nlogn)$ operations.
+>>b. Pre-computing the $p$ array: It will store the index $j$ of the last taks (of the sorted list) that finishes before task $i$ starts. This essentially finds the last compatible task for each of the $n$ tasks. This can be done using a binary search on the sorted list. We have previously shown that binary search is $O(nlogn)$.
+
+2. Dynamic Programming Work:
+>>a. Number of Subproblems: The state is represented by $i$, which ranges from $0$ to $n-1$ yielding $O(n)$ distinct subproblems.
+>>b. Work per Subproblem: The work inside each call is constant time: one max operation, one addition and two table lookups. This is $O(1)$.
+
+- Overall work: $W_{total}$ = $O(nlogn)$ (Sort) + $O(nlogn)$ (Pre-compute) + $O(n)$ (Dynamic Programming) = **$O(nlogn)$**.
+
+- Hence $W_{total} = O(nlogn)$.
+
+**Span:** 
+
 
