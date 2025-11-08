@@ -317,7 +317,7 @@ final_answer = solve_change(k, N)
 
 - **Conclusion: Greedy by earliest finish time fails.**
 
-With these two counterexamples, we have shown that the greedy property choice does not hold for this problem.
+>>With these two counterexamples, we have shown that the greedy property choice does not hold for this problem.
 
 - **5c.**
 In this problem, we have proven that we have an optimal subtructure property but not the greedy choice property so dynamic programming should be a great fit to solve this. We can use a top-down memoization approach.
@@ -395,5 +395,24 @@ In this problem, we have proven that we have an optimal subtructure property but
 - Hence $W_{total} = O(nlogn)$.
 
 **Span:** 
+Span is the longest chain of dependent operations and the total span for this problem is the span of its sequential parts added together: $Total Span = Span(Setup) + Span(DP)$
+
+1. Setup Span: This phase has 2 steps that must be done in order: sorting then pre-computing.
+>>a. Sorting: We will use HeapSort. HeapSort's span is dominated by the extraction of $n$ items one by one where it creates a dependcy chain of $n$ steps where each step (ie. a $heapify$) has a span of $O(logn)$. The total span is therefore $O(nlogn)$. 
+>>b. Pre-compute: We use binary search to find $p[i]$ for each task $i$. Finding $p[i]$ is completely independent of finding $p[j]$ which means all $n$ binary searches can be executed in parallel, with each search comprised of a span of $O(logn)$.
+
+>> Therefore the total setup span = $O(nlogn)$ + $O(logn)$ = **$O(nlogn)$**.
+
+2. Dynamic Programming Span:
+>>Longest Path in DAG: The solve_tasks_recursive(i) function makes a recursive call to solve_tasks_recursive(i-1) (the "Skip" choice).This creates a sequential dependency chain from $i = n-1$ down to $0$. To solve for $n-1$, you must wait for $n-2$, which must wait for $n-3$, and so on.This path, $(n-1) \to (n-2) \to \dots \to 0$, has a length of $n$. The longest path is therefore $O(n)$.
+
+>>Span per Node: The work inside each function call (assuming memoized lookups are $O(1)$) is just a few comparisons, lookups, an addition, and a max operation. This is all constant time, so the span is $O(1)$.
+
+>>Total DP Span = $O(n) \times O(1) = O(n)$.
+
+Hence, $Span_{total} = O(nlogn) + O(n) = O(nlogn)$.
+
+Note: If I used MergeSort which has a span of $O(log^2n)$, the span of the dynamic programming part would dominate and the overall total span would be **$O(n)$**. 
+
 
 
