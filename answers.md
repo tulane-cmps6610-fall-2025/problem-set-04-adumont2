@@ -19,10 +19,10 @@ asyoulik.txt    | 876253       | 606448         | 0.6921
 fields.c        | 78050        | 56206          | 0.7201
 grammar.lsp     | 26047        | 17356          | 0.6663
 ```
- - I do see a consistent trend. In all 5 files, the Huffman coding cost is significantly less than the fixed-length coding cost. The ratio varies between 0.62 and 0.72 (being well below 1). The mean ratio is ~0.67 or 2/3. This trend exists because the character frequencies in the 5 files are not uniform. The files contain both natural language text and source code wherein many characters (like 'e', 't' or '') appear frequently and other characters (such as 'z', 'q' or '}') appear rarely. The Huffman algorithm, as opposed to fixed-length encoding, exploits the aforementioned characteristic by assigning very short bit codes to the frequent characters and longer bit codes to the rare characters. Consequentl, this results in a lower weighted average cost compared to the fixed-length code (which uses the same number of bits for all characterss regardless of their frequency).
+ - I do see a consistent trend. In all 5 files, the Huffman coding cost is significantly less than the fixed-length coding cost. The ratio varies between 0.62 and 0.72 (being well below 1). The mean ratio is ~0.67 or 2/3. This trend exists because the character frequencies in the 5 files are not uniform. The files contain both natural language text and source code wherein many characters (like 'e', 't' or '') appear frequently and other characters (such as 'z', 'q' or '}') appear rarely. The Huffman algorithm, as opposed to fixed-length encoding, exploits the aforementioned characteristic by assigning very short bit codes to the frequent characters and longer bit codes to the rare characters. Consequently, this results in a lower weighted average cost compared to the fixed-length code (which uses the same number of bits for all characters regardless of their frequency).
 
 - **1d.**
-If Huffman coding is used on a document with alphabet $\sum$ in which every character had the same frequency, the Huffman algorithm would build a perfectly balanced binary tree (or as balanced as possible). Every leaf node (character) would be at the same depth or at depths that differ by at most 1 (eg. if number of characters is not a perfect power of 2). The length of every character's code would be $log_2k$, where $k$ is the number of unique characters in the alphabet. This code length would be ***identical to the number of bits required for a fixed-length encoding. Hence, the exepcted cost of the Huffman encoding would be exactly the same as the cost of a fixed-length encoding.*** ***This would be consistent across documents that have a uniform character frequency distribution.*** The toal cost will always be $(Total Characters)\times [log_2k]$.
+If Huffman coding is used on a document with alphabet $\sum$ in which every character had the same frequency, the Huffman algorithm would build a perfectly balanced binary tree (or as balanced as possible). Every leaf node (character) would be at the same depth or at depths that differ by at most 1 (eg. if number of characters is not a perfect power of 2). The length of every character's code would be $log_2k$, where $k$ is the number of unique characters in the alphabet. This code length would be ***identical to the number of bits required for a fixed-length encoding. Hence, the expected cost of the Huffman encoding would be exactly the same as the cost of a fixed-length encoding.*** ***This would be consistent across documents that have a uniform character frequency distribution.*** The total cost will always be $(Total Characters)\times [log_2k]$.
 
 
 
@@ -32,7 +32,7 @@ Given an array A of size $n$ elements, we will treat this as an almost-complete 
 
     Our array size is n elements with indices 0 to n-1. The last parent (non-leaf node) will be the **largest index** $i$ whose left child ($2*i +1$) is still inside the array. Hence, $2*i +1$ $\le$ $n-1$. Solve for $i$. $i$ $\le$ $(n-2)/2$ or $i = [n/2] - 1$
 
-     Hence, the last non-leaf node in the treee should be at index $i = [n/2] -1$. All nodes after this are valid mini-heaps.We can then iterate backward looping from $i = [n/2] -1$ down to the root (index $0$). We can implement the operation **sift-down** or **heapify** operation. This operation assumes the subtrees rooted at the left and right children of $i$ are already valid mini-heaps. t compares the node $i$ with its children. If $A[i]$ is larger than its smallest child, it is swapped with the smallest child. This process is recursively executed (the node "sifts down") until the node $i$ is smaller than both of its children or it becomes a leaf.
+     Hence, the last non-leaf node in the tree should be at index $i = [n/2] -1$. All nodes after this are valid mini-heaps. We can then iterate backward looping from $i = [n/2] -1$ down to the root (index $0$). We can implement the operation **sift-down** or **heapify** operation. This operation assumes the subtrees rooted at the left and right children of $i$ are already valid mini-heaps. It compares the node $i$ with its children. If $A[i]$ is larger than its smallest child, it is swapped with the smallest child. This process is recursively executed (the node "sifts down") until the node $i$ is smaller than both of its children or it becomes a leaf.
 
      Work analysis:
 
@@ -103,7 +103,7 @@ To prove this algorithm is optimal, we must prove the greedy choice and optimal 
 
 >>**1. Proof of Greedy Choice Property**
 
->>Let $2^k$ be the largest coin denomination relevant to this problem such that $2^k \le N$. There exists an optimal solution for $N$ that includes at least one coin of value $2^k$. The general intuition here is that if we don't take the biggest possible coin, we will be forced to make up its value using a combination of smaller coins; for coins of power-of-2, any combination of smaller coins is awlays a worse deal (ie. requires more coins) than just taking the one big coin first. We will show this with a proof by contradiction.
+>>Let $2^k$ be the largest coin denomination relevant to this problem such that $2^k \le N$. There exists an optimal solution for $N$ that includes at least one coin of value $2^k$. The general intuition here is that if we don't take the biggest possible coin, we will be forced to make up its value using a combination of smaller coins; for coins of power-of-2, any combination of smaller coins is always a worse deal (ie. requires more coins) than just taking the one big coin first. We will show this with a proof by contradiction.
 
 >>**Proof**
 
@@ -125,15 +125,15 @@ To prove this algorithm is optimal, we must prove the greedy choice and optimal 
 
 >>1. Let $S$ be an optimal solution for $N$. Based upon the proof above for Greedy Choice Property, we know $S$ must contain one $2^k$ coin. Let $S' = S- {2^k}$. The set $S'$ is a solution for the subproblem $N' = N - 2^k$, and the total number of coins is $|S| = 1 + |S'|$. 
 
->>2. We will now prove by contradiction that $S'$ must be optimal for $N'$. Assume $S'$ is ***not*** an optimal solution for $N'$. This means there must be some ofhter solution, $S''$, for $N'$ that uses fewer coins, so |$S''$| $\lt$ |$S'$|. If $S''$ exists, we could construct a new solution for the original problem $N$ by taking $S_{new} =$ $S''$ $\cup$ \{$2^k$}.
+>>2. We will now prove by contradiction that $S'$ must be optimal for $N'$. Assume $S'$ is ***not*** an optimal solution for $N'$. This means there must be some other solution, $S''$, for $N'$ that uses fewer coins, so |$S''$| $\lt$ |$S'$|. If $S''$ exists, we could construct a new solution for the original problem $N$ by taking $S_{new} =$ $S''$ $\cup$ \{$2^k$}.
 
->>3. The size of this new solution would be |$S_{new}$| = |$S''$| + $1$. As stated above, we assumed |$S''$| $\lt$ |$S'$|, so it follows that |$S''$| + $1$ $\lt$ |$S''$| + $1$. which means |$S_{new}$| $\lt$ |$S$|. This, however, contradicts our initial assumption that $S$ was the optimal solution for $N$. Therefore, $S'$ must be an optimal solution for the subproblem $N'$.
+>>3. The size of this new solution would be |$S_{new}$| = |$S''$| + $1$. As stated above, we assumed |$S''$| $\lt$ |$S'$|, so it follows that |$S''$| + $1$ $\lt$ |$S'$| + $1$. which means |$S_{new}$| $\lt$ |$S$|. This, however, contradicts our initial assumption that $S$ was the optimal solution for $N$. Therefore, $S'$ must be an optimal solution for the subproblem $N'$.
 
 >>***Since both the proof of greedy choice property and optimal substructure property hold, the greedy algorithm we developed is optimal.***
 - **3c.**
 The input, or the amount of money to exchange, is $N$. The available denominations of coins are [$D = {2^0, 2^1, \dots, 2^k}$], where $k$ is the largest integer such that $2^k \le N$. Taking $\log_2$ of both sides means $k = [\log_2{N}]$. The number of denominations we must consider, $m = k +1$, is therefore $O(\log(N))$.
 
->>For any demonation $c = 2^j$, if we use it once, the remaining amount $A' = A -2^j$. Since we only consider $c$ if $A \lt 2^{j+1}$ (as $2^{j+1} would have been taken in the previous step), the new amount $A' = A -2^j \lt 2^{j+1} = 2^j$. The new amount is now strictly less than c, so the coin $2^j$ can never be used more than once. Therefore, this is equivalent to finding the binary representation of $N$.
+>>For any denomination $c = 2^j$, if we use it once, the remaining amount $A' = A -2^j$. Since we only consider $c$ if $A \lt 2^{j+1}$ (as $2^{j+1} would have been taken in the previous step), the new amount $A' = A -2^j \lt 2^{j+1} = 2^j$. The new amount is now strictly less than c, so the coin $2^j$ can never be used more than once. Therefore, this is equivalent to finding the binary representation of $N$.
 Some pseudocode could be:
 
 1. $k= floor(\log_2(N))$
@@ -155,15 +155,15 @@ Some pseudocode could be:
 
 
 >>**Span Analysis**
->>As we have discussed previously, span is the longest chain of sequential dependencies. This is a sequential algorithm. If we look at the iterations, the calculation in iteration $j - 1$ requires the result from iteration $j$ and hence, iteration $j - 1$ cannot start until iteration $j$ is finished. There is no opportunity for parallelism as presented in the alogrithm so $S_{total}$ = $O(\log(N))$ + $O(\log(N))$ = $O(\log(N))$.
+>>As we have discussed previously, span is the longest chain of sequential dependencies. This is a sequential algorithm. If we look at the iterations, the calculation in iteration $j - 1$ requires the result from iteration $j$ and hence, iteration $j - 1$ cannot start until iteration $j$ is finished. There is no opportunity for parallelism as presented in the algorithm so $S_{total}$ = $O(\log(N))$ + $O(\log(N))$ = $O(\log(N))$.
 
 - **4a.**
 The greedy algorithm we devised for Geometrica does not work in Fortuito. We will present a counterexample below to corroborate this.
 
-We must find the minimum numer of coins to make change for amount $N$ using an arbitrary set of k denominations $D = {D_0, D_1, ..., D_{k-1}}$.
+We must find the minimum number of coins to make change for amount $N$ using an arbitrary set of k denominations $D = {D_0, D_1, ..., D_{k-1}}$.
 
 **Counter Example**
-Suppose we have $N = 6$. The Denomations include: $D: {1, 3, 4}$
+Suppose we have $N = 6$. The Denominations include: $D: {1, 3, 4}$
 
 The Greedy solution we developed for Problem 3 proceeds as follows:
 - Take coin 4, remainder = 2
