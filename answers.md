@@ -87,10 +87,11 @@ Given that we wish to exchange $N$ dollars for local currency where local curren
     Possible coins in powers of 2 for the exchange include $\{16, 8, 4, 2, 1\}$
 
     Greedy Coins selected through our algorithm: $\{16, 8, 4, 1\}$
+
 $$
-\begin{array}{ccccc}
-\text{Binary '1's:} & 1 & 1 & 1 & 0 & 1 \\
-& \downarrow & \downarrow & \downarrow & \downarrow & \downarrow \\
+\begin{array}{ccccccc}
+\text{Binary '1's:} & 1 & 1 & 1 & 0 & 1 & \\
+& \downarrow & \downarrow & \downarrow & \downarrow & \downarrow & \\
 & 16 & +8 & +4 & +0 & +1 & = 29
 \end{array}
 $$
@@ -107,7 +108,7 @@ To prove this algorithm is optimal, we must prove the greedy choice and optimal 
 
 >>**Proof**
 
->>1. Let $S$ be any optimal solution for $N$. We know that $N \lt 2^{k+1}$. If we go back to our example above, we wanted to exchange $N = 29$ and possible coins were $16, 8, 4, 2, 1$.  Coin $2^k = 16$ and coin $2^{k+1} = 32$ which exceeds $N$. Therefore $S$ can contain one coin of value $2^k$ at most (as two would be $2 \cdot 2^k = 2^{k+1}$, which is greater than $N$).
+>>1. Let $S$ be any optimal solution for $N$. We know that $N < 2^{k+1}$. If we go back to our example above, we wanted to exchange $N = 29$ and possible coins were $16, 8, 4, 2, 1$.  Coin $2^k = 16$ and coin $2^{k+1} = 32$ which exceeds $N$. Therefore $S$ can contain one coin of value $2^k$ at most (as two would be $2 \cdot 2^k = 2^{k+1}$, which is greater than $N$).
 
 >>2. We will assume that $S$ does not contain a $2^k$ coin. All coins in $S$ must therefore have a value of $2^{k-1}$ or less.
 
@@ -125,15 +126,15 @@ To prove this algorithm is optimal, we must prove the greedy choice and optimal 
 
 >>1. Let $S$ be an optimal solution for $N$. Based upon the proof above for Greedy Choice Property, we know $S$ must contain one $2^k$ coin. Let $S' = S- {2^k}$. The set $S'$ is a solution for the subproblem $N' = N - 2^k$, and the total number of coins is $|S| = 1 + |S'|$. 
 
->>2. We will now prove by contradiction that $S'$ must be optimal for $N'$. Assume $S'$ is ***not*** an optimal solution for $N'$. This means there must be some other solution, $S''$, for $N'$ that uses fewer coins, so |$S''$| $\lt$ |$S'$|. If $S''$ exists, we could construct a new solution for the original problem $N$ by taking $S_{new} =$ $S''$ $\cup$ \{$2^k$}.
+>>2. We will now prove by contradiction that $S'$ must be optimal for $N'$. Assume $S'$ is ***not*** an optimal solution for $N'$. This means there must be some other solution, $S''$, for $N'$ that uses fewer coins, so |$S''$| < |$S'$|. If $S''$ exists, we could construct a new solution for the original problem $N$ by taking $S_{new} =$ $S''$ $\cup$ \{$2^k$}.
 
->>3. The size of this new solution would be |$S_{new}$| = |$S''$| + $1$. As stated above, we assumed |$S''$| $\lt$ |$S'$|, so it follows that |$S''$| + $1$ $\lt$ |$S'$| + $1$. which means |$S_{new}$| $\lt$ |$S$|. This, however, contradicts our initial assumption that $S$ was the optimal solution for $N$. Therefore, $S'$ must be an optimal solution for the subproblem $N'$.
+>>3. The size of this new solution would be |$S_{new}$| = |$S''$| + $1$. As stated above, we assumed |$S''$| < |$S'$|, so it follows that |$S''$| + $1$ < |$S'$| + $1$. which means |$S_{new}$| < |$S$|. This, however, contradicts our initial assumption that $S$ was the optimal solution for $N$. Therefore, $S'$ must be an optimal solution for the subproblem $N'$.
 
 >>***Since both the proof of greedy choice property and optimal substructure property hold, the greedy algorithm we developed is optimal.***
 - **3c.**
 The input, or the amount of money to exchange, is $N$. The available denominations of coins are [$D = {2^0, 2^1, \dots, 2^k}$], where $k$ is the largest integer such that $2^k \le N$. Taking $\log_2$ of both sides means $k = [\log_2{N}]$. The number of denominations we must consider, $m = k +1$, is therefore $O(\log(N))$.
 
->>For any denomination $c = 2^j$, if we use it once, the remaining amount $A' = A -2^j$. Since we only consider $c$ if $A \lt 2^{j+1}$ (as $2^{j+1} would have been taken in the previous step), the new amount $A' = A -2^j \lt 2^{j+1} = 2^j$. The new amount is now strictly less than c, so the coin $2^j$ can never be used more than once. Therefore, this is equivalent to finding the binary representation of $N$.
+>>For any denomination $c = 2^j$, if we use it once, the remaining amount $A' = A -2^j$. Since we only consider $c$ if $A < 2^{j+1}$ (as $2^{j+1} would have been taken in the previous step), the new amount $A' = A -2^j < 2^{j+1} = 2^j$. The new amount is now strictly less than c, so the coin $2^j$ can never be used more than once. Therefore, this is equivalent to finding the binary representation of $N$.
 Some pseudocode could be:
 
 1. $k= floor(\log_2(N))$
@@ -186,8 +187,8 @@ Stating this property in the context of this problem: Let $Optimal(N)$ be the mi
 **Proof**
 We will perform a proof by contradiction.
 - 1. We will assume we have an optimal solution for $N$, which we will denote as $S_N$. This solution contains $Optimal(N)$ coins. $S_N$ consists of a first coin, $D_i$ and a set of remaining coins, $S'$, that sum to $N - D_i$. It thus follows that the size of the solution is 1 + $|S'|$.
-- 2. We will now assume, in contradiction to the above, that $S'$ is ***not*** an optimal solution for the subproblem of $N - D_i$. Given this, there exists some of other set of coins, $S''$, that also sums to $N - D_i$ but has fewer coins - that is, $|S''| \lt |S'|$.
-- 3. If the assertions in 2. were true, we could create a *new* solution for $N$ by combining the first coin $D_i$ with the set $S''$. The total number of coins would be $1 + |S''|$. Given that $|S''| \lt |S'|$ as stated above, then adding 1 to each side of the inequality, $1 + |S''| \lt 1 + |S'|$. This means that our new solution, $S''$ has fewer coins than our original "optimal" solution $S_N$. This is a contradiction.
+- 2. We will now assume, in contradiction to the above, that $S'$ is ***not*** an optimal solution for the subproblem of $N - D_i$. Given this, there exists some of other set of coins, $S''$, that also sums to $N - D_i$ but has fewer coins - that is, $|S''| < |S'|$.
+- 3. If the assertions in 2. were true, we could create a *new* solution for $N$ by combining the first coin $D_i$ with the set $S''$. The total number of coins would be $1 + |S''|$. Given that $|S''| < |S'|$ as stated above, then adding 1 to each side of the inequality, $1 + |S''| < 1 + |S'|$. This means that our new solution, $S''$ has fewer coins than our original "optimal" solution $S_N$. This is a contradiction.
 
 >>Therefore, our assumption in 2. above must be false. The set of remaining coins $S'$ must be an optimal solution for the subproblem $N - D_i$ and this problem has an optimal substructure property.
 
@@ -280,9 +281,9 @@ final_answer = solve_change(k, N)
 - Yes, the optimal substructure property appears to hold for weighted task selection. We will use a proof by contradiction.
 - 1. Assume the tasks $A = \{a_0, ... , a_{n-1}\}$ are sorted by their finish times. Let $opt$ by an optimal solution (a set of compatible tasks with maximum total value) for the full set of tasks. This task $a_i$ has a value, $v_i$. As $a_i$ is in the solution, no other task in $opt$ can conflict with it. Therefore, all other tasks in $opt$ must finish before $a_i$ starts.
 -2. We will now define a subproblem which is to find the optimal solution for all tasks in $A$ that are compatible with $a_i$. Let $opt'$ = $opt$ - \{$a_i$} be the rest of our optimal solution. The value of the solution is $value(O) = value(O') + v_i$. 
--3. Now assume that $opt'$ is not an optimal solution for this subproblem. This means that there must be some other set of compatible tasks $S'$ whose total value is greater then $opt'$ (ie. $value(S') \gt value(O')$).
+-3. Now assume that $opt'$ is not an optimal solution for this subproblem. This means that there must be some other set of compatible tasks $S'$ whose total value is greater then $opt'$ (ie. $value(S') > value(O')$).
 >>>>- If this were true, we could create a new solution $S = S' \cup \{a_i\}$. This new solution $S$ would be valid (since all tasks in $S'$ are compatible with $a_i$).
->>>>- Its total value would be $value(S) = value(S') + v_i$. Since we assumed $value(S') \gt value(O')$, it follows that $value(S) \gt value(O')$. This means that $value(S) \gt value(O)$ which contradicts our initial assumption that $opt$ was the optimal solution.
+>>>>- Its total value would be $value(S) = value(S') + v_i$. Since we assumed $value(S') > value(O')$, it follows that $value(S) > value(O')$. This means that $value(S) > value(O)$ which contradicts our initial assumption that $opt$ was the optimal solution.
 
 - Therefore, our assumption must be false. $opt'$ must be an optimal solution for the subproblem of tasks compatible with $a_i$. This proves that an optimal solution to the problem contains optimal solutions to its subproblems.
 
