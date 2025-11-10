@@ -22,7 +22,7 @@ grammar.lsp     | 26047        | 17356          | 0.6663
  - I do see a consistent trend. In all 5 files, the Huffman coding cost is significantly less than the fixed-length coding cost. The ratio varies between 0.62 and 0.72 (being well below 1). The mean ratio is ~0.67 or 2/3. This trend exists because the character frequencies in the 5 files are not uniform. The files contain both natural language text and source code wherein many characters (like 'e', 't' or '') appear frequently and other characters (such as 'z', 'q' or '}') appear rarely. The Huffman algorithm, as opposed to fixed-length encoding, exploits the aforementioned characteristic by assigning very short bit codes to the frequent characters and longer bit codes to the rare characters. Consequently, this results in a lower weighted average cost compared to the fixed-length code (which uses the same number of bits for all characters regardless of their frequency).
 
 - **1d.**
-If Huffman coding is used on a document with alphabet $\sum$ in which every character had the same frequency, the Huffman algorithm would build a perfectly balanced binary tree (or as balanced as possible). Every leaf node (character) would be at the same depth or at depths that differ by at most 1 (eg. if number of characters is not a perfect power of 2). The length of every character's code would be $log_2k$, where $k$ is the number of unique characters in the alphabet. This code length would be ***identical to the number of bits required for a fixed-length encoding. Hence, the expected cost of the Huffman encoding would be exactly the same as the cost of a fixed-length encoding.*** ***This would be consistent across documents that have a uniform character frequency distribution.*** The total cost will always be $(Total Characters)\times [log_2k]$.
+If Huffman coding is used on a document with alphabet $\sum$ in which every character had the same frequency, the Huffman algorithm would build a perfectly balanced binary tree (or as balanced as possible). Every leaf node (character) would be at the same depth or at depths that differ by at most 1 (eg. if number of characters is not a perfect power of 2). The length of every character's code would be $\lceil \log_2 k \rceil$, where $k$ is the number of unique characters in the alphabet. This code length would be ***identical to the number of bits required for a fixed-length encoding. Hence, the expected cost of the Huffman encoding would be exactly the same as the cost of a fixed-length encoding.*** ***This would be consistent across documents that have a uniform character frequency distribution.*** The total cost will always be $(Total Characters)\times \lceil \log_2 k \rceil$.
 
 
 
@@ -168,7 +168,7 @@ Suppose we have $N = 6$. The Denominations include: $D: {1, 3, 4}$
 The Greedy solution we developed for Problem 3 proceeds as follows:
 - Take coin 4, remainder = 2
 - Take coin 1, remainder = 1
-- Take coin 1, reaminder =0
+- Take coin 1, remainder = 0
 - This takes a total of **3 coins**
 
 The optimal solution proceeds as follows:
@@ -181,7 +181,7 @@ Therefore, this counterexample proves that the greedy algorithm does not always 
 - **4b.**
 The optimal substructure property states that an optimal solution can be constructed from optimal solutions of smaller subproblems.
 
-Stating this property in the context of this problem: Let $Optimal(N)$ be the minimum number of coins required to make change for an amount $N$. An optimal solution for $Optimal(N)$ must use some first coin, $D_i$. The remaining $Optimal(N) -1$ coins in that solution must themselves form an optimal solution for the subproblem of making change for the remaining amound, defined as $N-D_i$.
+Stating this property in the context of this problem: Let $Optimal(N)$ be the minimum number of coins required to make change for an amount $N$. An optimal solution for $Optimal(N)$ must use some first coin, $D_i$. The remaining $Optimal(N) -1$ coins in that solution must themselves form an optimal solution for the subproblem of making change for the remaining amount, defined as $N-D_i$.
 
 **Proof**
 We will perform a proof by contradiction.
@@ -196,18 +196,18 @@ Using the optimal substructure property, we have created a dynamic programming a
 1. memo function - this function adds a memory or checks the memory table before the recursive function runs to ensure that the same subproblem is only solved once. This function checks the memo table for a given input. If it finds a result it returns the result, and if it finds nothing it runs the computation function, stores the new result and then returns that result to avoid re-computing the same problem.
 2. recursive function - this core recursive function contains the logic for solving the change-making problem. It defines the problem's optimal substructure. It is called with a state ($i, n$) where $i$ is the number of coin types we are allowed to use and $n$, the amount of change we are trying to make. The function works by checking cases:
 - Base case 1: (case (_,0)) - the problem is solved. The cost to make 0 is 0 coins. It returns 0.
-- Base case 2: (case (0, _)) - We have 0 coint types left but n is still greater than 0 so it is impossible to make change. It will return infinity.
-- Recursive Case: (case _) - All other situations. We have $i$ coins and need to make amount $n$. The function shjould solve this by finding the *minimum* of 2 smaller, recursive subproblems. It gets the current coin's value, coin_w.
+- Base case 2: (case (0, _)) - We have 0 coin types left but n is still greater than 0 so it is impossible to make change. It will return infinity.
+- Recursive Case: (case _) - All other situations. We have $i$ coins and need to make amount $n$. The function should solve this by finding the *minimum* of 2 smaller, recursive subproblems. It gets the current coin's value, coin_w.
 
 >>-    Choice 1 - Skip. This skips the ith coin and solves the problem for the same amount $n$, but only using the first $i-1$ coins.
 
->>- Choice 2- Take. This asks what is the mininum number of coins if the ith coin is used. It first checks in $n \ge coin_w$. Is not, it can't take the coin and this choice is inifinity. If it can take the coin, it calculates $1 +$ (the solution to a new subproblem).
+>>- Choice 2- Take. This asks what is the minimum number of coins if the ith coin is used. It first checks in $n \ge coin_w$. If not, it can't take the coin and this choice is inifinity. If it can take the coin, it calculates $1 +$ (the solution to a new subproblem).
 >>>>- The 1 counts the coin we just took.
 >>>>- The new subproblem is ($i, n -coin_w$). We must solve for the *remaining amount* ($n - coin_w$). We must pass $i$ (not $i-1$) as this is an unbounded problem where we are allowed to re-use the $ith$ coin.
 
 >>- **Final Result**: The function returns the min of Choice 1 (Skip) or Choice 2 (Take).
 
-3. wrapper function - to initialize the memo table and start the process. It gets the total number of denominations, $k$. It creates a new, empty memo table and then calls the recusrive function on the full-sized problem "solve for $k$ coins and amount $N$". It then returns the final answer.
+3. wrapper function - to initialize the memo table and start the process. It gets the total number of denominations, $k$. It creates a new, empty memo table and then calls the recursive function on the full-sized problem "solve for $k$ coins and amount $N$". It then returns the final answer.
 
 - A simplified pseudocode is as follows:
 
@@ -268,7 +268,7 @@ final_answer = solve_change(k, N)
 
 **Work and Span Analysis**
 - **Work**: The work will be calculated by the number of subproblems multiplied by the work per subproblem.
->>- Number of subproblems: The state is ($i, n$), where $i$ ranges from $0 to N$. This gives $O(k) \times O(N) = O(kN)$ distinct subproblems (nodes in the DAG).
+>>- Number of subproblems: The state is ($i, n$), where $i$ ranges from $0 to k$. This gives $O(k) \times O(N) = O(kN)$ distinct subproblems (nodes in the DAG).
 >>- Work per subproblem: The work inside the recursive function (assuming memoized calls are $O(1)$) involves a few comparison, an array lookup, an addition and a min operation which can all be done in constant time ($O(1)$).
 
 - **Span**: The span is the longest path in the recursion DAG.
@@ -277,9 +277,9 @@ final_answer = solve_change(k, N)
 >>**Total work: $O(kN) \times O(1) = O(kN)$**.
 
 - **5a.**
-- Yes, the optimal substructure propertry appears to hold for weighted task selection. We will use a proof by contradiction.
+- Yes, the optimal substructure property appears to hold for weighted task selection. We will use a proof by contradiction.
 - 1. Assume the tasks $A = \{a_0, ... , a_{n-1}\}$ are sorted by their finish times. Let $opt$ by an optimal solution (a set of compatible tasks with maximum total value) for the full set of tasks. This task $a_i$ has a value, $v_i$. As $a_i$ is in the solution, no other task in $opt$ can conflict with it. Therefore, all other tasks in $opt$ must finish before $a_i$ starts.
--2. We will now define a subproblem which is to find the optimall solution for all tasks in $A$ that are compatible with $a_i$. Let $opt'$ = $opt$ - \{$a_i$} be the rest of our optimal solution. The value of the solution if $value(O) = value(O') + v_i$. 
+-2. We will now define a subproblem which is to find the optimal solution for all tasks in $A$ that are compatible with $a_i$. Let $opt'$ = $opt$ - \{$a_i$} be the rest of our optimal solution. The value of the solution is $value(O) = value(O') + v_i$. 
 -3. Now assume that $opt'$ is not an optimal solution for this subproblem. This means that there must be some other set of compatible tasks $S'$ whose total value is greater then $opt'$ (ie. $value(S') \gt value(O')$).
 >>>>- If this were true, we could create a new solution $S = S' \cup \{a_i\}$. This new solution $S$ would be valid (since all tasks in $S'$ are compatible with $a_i$).
 >>>>- Its total value would be $value(S) = value(S') + v_i$. Since we assumed $value(S') \gt value(O')$, it follows that $value(S) \gt value(O')$. This means that $value(S) \gt value(O)$ which contradicts our initial assumption that $opt$ was the optimal solution.
@@ -288,7 +288,7 @@ final_answer = solve_change(k, N)
 
 - **5b.**
 
->>The greedy choice property does not hold for this subproblem. Greedy criteria will fail to produce an optimal solution. Two counter examples to lend credence to this assertion include:
+>>The greedy choice property does not hold for this problem. Greedy criteria will fail to produce an optimal solution. Two counter examples to lend credence to this assertion include:
 
 1. Greedy by Highest Value ($v_i$):
 
@@ -322,9 +322,9 @@ final_answer = solve_change(k, N)
 - **5c.**
 In this problem, we have proven that we have an optimal subtructure property but not the greedy choice property so dynamic programming should be a great fit to solve this. We can use a top-down memoization approach.
 
-- We will sort the tasks by finish time. Then for each task $i$ we can decide wheter to "take" it or "skip" it.
+- We will sort the tasks by finish time. Then for each task $i$ we can decide whether to "take" it or "skip" it.
 
-- We will use a wrapper function to setup and a recursive function to compute the maxmium value obtainable from tasks $a_0$ through $a_i$.
+- We will use a wrapper function to setup and a recursive function to compute the maximum value obtainable from tasks $a_0$ through $a_i$.
 
 1. Wrapper function - this performs the setup by sorting and pre-computing values. 
 
@@ -380,11 +380,11 @@ In this problem, we have proven that we have an optimal subtructure property but
 
 **Work and Span Analysis**:
 
-**Work:** The work of an alogrithm is its total number of operations from start to finish and for this particular alogrithm outlined above it consider the Setup and Dynamic Programming (sovling the problem).
+**Work:** The work of an algorithm is its total number of operations from start to finish and for this particular alogrithm outlined above it considers the Setup and Dynamic Programming (solving the problem).
 
 1. Setup work: This is the preprocessing we must perform before the recursive dynamic programming solution can be formulated. It is comprised of 2 parts:
 >>a. Sorting: We will sort by finish times and will use heap sort which we have proven before takes $O(nlogn)$ operations.
->>b. Pre-computing the $p$ array: It will store the index $j$ of the last taks (of the sorted list) that finishes before task $i$ starts. This essentially finds the last compatible task for each of the $n$ tasks. This can be done using a binary search on the sorted list. We have previously shown that binary search is $O(nlogn)$.
+>>b. Pre-computing the $p$ array: It will store the index $j$ of the last tasks (of the sorted list) that finishes before task $i$ starts. This essentially finds the last compatible task for each of the $n$ tasks. This can be done using a binary search on the sorted list. We have previously shown that binary search is $O(nlogn)$.
 
 2. Dynamic Programming Work:
 >>a. Number of Subproblems: The state is represented by $i$, which ranges from $0$ to $n-1$ yielding $O(n)$ distinct subproblems.
@@ -398,7 +398,7 @@ In this problem, we have proven that we have an optimal subtructure property but
 Span is the longest chain of dependent operations and the total span for this problem is the span of its sequential parts added together: $Total Span = Span(Setup) + Span(DP)$
 
 1. Setup Span: This phase has 2 steps that must be done in order: sorting then pre-computing.
->>a. Sorting: We will use HeapSort. HeapSort's span is dominated by the extraction of $n$ items one by one where it creates a dependcy chain of $n$ steps where each step (ie. a $heapify$) has a span of $O(logn)$. The total span is therefore $O(nlogn)$. 
+>>a. Sorting: We will use HeapSort. HeapSort's span is dominated by the extraction of $n$ items one by one where it creates a dependency chain of $n$ steps where each step (ie. a $heapify$) has a span of $O(logn)$. The total span is therefore $O(nlogn)$. 
 >>b. Pre-compute: We use binary search to find $p[i]$ for each task $i$. Finding $p[i]$ is completely independent of finding $p[j]$ which means all $n$ binary searches can be executed in parallel, with each search comprised of a span of $O(logn)$.
 
 >> Therefore the total setup span = $O(nlogn)$ + $O(logn)$ = **$O(nlogn)$**.
