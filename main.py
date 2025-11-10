@@ -108,30 +108,29 @@ def huffman_cost(C, f):
 # --- Main execution ---
 # This part will run all calculations for all 5 files
 # and print the results, which you can use for your table in 1d.
+if __name__ == "__main__":
+    # List of all 5 text files from the repository
+    files = ['F1.txt', 'alice29.txt', 'asyoulik.txt', 'fields.c', 'grammar.lsp']
 
-# List of all 5 text files from the repository
-files = ['F1.txt', 'alice29.txt', 'asyoulik.txt', 'fields.c', 'grammar.lsp']
+    print("--- Huffman Coding Costs (for 1d) ---")
+    print(f"{'File':<15} | {'Fixed Cost':<12} | {'Huffman Cost':<14} | {'Ratio (Huffman/Fixed)':<20}")
+    print("-" * 67)
 
-print("--- Huffman Coding Costs (for 1d) ---")
-print(f"{'File':<15} | {'Fixed Cost':<12} | {'Huffman Cost':<14} | {'Ratio (Huffman/Fixed)':<20}")
-print("-" * 67)
+    for fname in files:
+        # 1. Get frequencies
+        f = get_frequencies(fname)
 
-for fname in files:
-    # 1. Get frequencies
-    f = get_frequencies(fname)
-    
-    # 2. Compute fixed cost
-    f_cost = fixed_length_cost(f)
-    
-    # 3. Compute Huffman cost
-    T = make_huffman_tree(f)
-    C = get_code(T) # This will create a new code dict for each file
-    h_cost = huffman_cost(C, f)
-    
-    # 4. Compute ratio
-    ratio = h_cost / f_cost
-    
-    # 5. Print the results in a formatted table
-    print(f"{fname:<15} | {f_cost:<12} | {h_cost:<14} | {ratio:<20.4f}")
+        # 2. Compute fixed cost
+        f_cost = fixed_length_cost(f)
 
+        # 3. Compute Huffman cost
+        T = make_huffman_tree(f)
+        C = get_code(T) # This will create a new code dict for each file
+        h_cost = huffman_cost(C, f)
+
+        # 4. Compute ratio
+        ratio = h_cost / f_cost
+
+        # 5. Print the results in a formatted table
+        print(f"{fname:<15} | {f_cost:<12} | {h_cost:<14} | {ratio:<20.4f}")
 
